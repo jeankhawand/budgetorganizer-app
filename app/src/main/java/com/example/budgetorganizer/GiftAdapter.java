@@ -39,7 +39,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.GiftViewHolder
     @Override
     public GiftAdapter.GiftViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.person_item, parent, false);
+        View view = inflater.inflate(R.layout.gift_item, parent, false);
         return new GiftAdapter.GiftViewHolder(view);
     }
 
@@ -64,7 +64,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.GiftViewHolder
               Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift_black);
                holder.mGiftImageView.setImageDrawable(giftDrawable);
            }
-//           holder.mGiftDateTextView.setText(gift.getDate());
+           holder.mGiftDateTextView.setText(gift.getDate());
            holder.itemView.setTag(gift.getId());
        }
     }
