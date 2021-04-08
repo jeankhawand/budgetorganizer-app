@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddGiftActivity"
+    tools:ignore="HardcodedText">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_marginBottom="12dp"
+        android:hint="@string/lbl_gift_name"
+        app:endIconCheckable="true"
+        app:endIconDrawable="@drawable/gift"
+        app:endIconMode="custom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ed_gift_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/gift_name_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_marginBottom="12dp"
+        android:hint="@string/lbl_price"
+        app:endIconCheckable="true"
+        app:endIconDrawable="@drawable/dollar"
+        app:endIconMode="custom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ed_gift_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/price_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/pick_date_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:text="Select Date"
+        android:textSize="18sp"
+        app:icon="@drawable/calendar" />
+
+    <Button
+        android:id="@+id/pick_take_photo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:onClick="selectImage"
+        android:text="Take/Pick Photo"
+        android:textSize="18sp"
+        app:icon="@drawable/camera" />
+</LinearLayout>
