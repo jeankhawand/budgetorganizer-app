@@ -1,5 +1,6 @@
 package com.example.budgetorganizer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -51,7 +52,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.GiftViewHolder
            holder.mGiftNameTextView.setText(gift.getName());
            holder.mGiftPriceTextView.setText(gift.getPrice()+"$");
            if(gift.getPhotoPath() == null){
-               Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift);
+            Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift_black);
                holder.mGiftImageView.setImageDrawable(giftDrawable);
            }else{
                file = new File(gift.getPhotoPath());
@@ -60,11 +61,10 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.GiftViewHolder
            if(file != null && file.exists()){
                holder.mGiftImageView.setImageBitmap(BitmapFactory.decodeFile(gift.getPhotoPath()));
            }else{
-               Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift);
+              Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift_black);
                holder.mGiftImageView.setImageDrawable(giftDrawable);
            }
-
-//           holder.mGiftDateTextView.setText(String.valueOf(gift.getDate()));
+//           holder.mGiftDateTextView.setText(gift.getDate());
            holder.itemView.setTag(gift.getId());
        }
     }

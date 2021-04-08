@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddGiftActivity extends AppCompatActivity {
-    private Button mPickDateButton, mPickPhotoButton;
+    private Button mPickDateButton;
     private EditText mGiftNameEditText, mGiftPriceEditText;
     private long person_id;
     private String date = "";
@@ -46,7 +46,6 @@ public class AddGiftActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_gift);
         mPickDateButton = findViewById(R.id.pick_date_button);
-        mPickPhotoButton = findViewById(R.id.pick_take_photo_button);
         mGiftNameEditText = findViewById(R.id.ed_gift_name);
         mGiftPriceEditText = findViewById(R.id.ed_gift_price);
         DbHelper dbHelper = new DbHelper(this);
@@ -74,7 +73,7 @@ public class AddGiftActivity extends AppCompatActivity {
             Gift gift = new Gift();
             gift.setName(mGiftNameEditText.getText().toString());
             gift.setPrice(Integer.parseInt(mGiftPriceEditText.getText().toString()));
-            if(date == null){
+            if(date.matches("")){
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM d, yyyy");
                 date = simpleDateFormat.format(calendar.getTime());
