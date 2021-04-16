@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".AddPersonActivity"
     tools:ignore="HardcodedText">
-
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
@@ -18,15 +17,12 @@
         app:endIconCheckable="true"
         app:endIconDrawable="@drawable/person"
         app:endIconMode="custom">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_person_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/person_name_hint" />
-
     </com.google.android.material.textfield.TextInputLayout>
-
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
@@ -37,13 +33,16 @@
         app:endIconCheckable="true"
         app:endIconDrawable="@drawable/dollar"
         app:endIconMode="custom">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_budget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/budget_hint" />
-
     </com.google.android.material.textfield.TextInputLayout>
-
+    <Button
+        android:id="@+id/btnContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="ChooseContact"
+        android:text="Choose Contact" />
 </LinearLayout>

@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.budgetorganizer">
+
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,9 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetOrganizer"
         tools:replace="android:icon,android:theme">
+        <activity android:name=".Contacts"></activity>
+
         <service
             android:name=".tasks.GiftRemiderIntentService"
             android:exported="false" />
+
         <activity android:name=".AddGiftActivity" />
         <activity
             android:name=".GiftActivity"
@@ -22,16 +27,17 @@
         <activity
             android:name=".AddPersonActivity"
             android:label="Add Person" />
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <service android:name=".tasks.GiftRemiderIntentService" android:exported="false"/>
+
+        <service
+            android:name=".tasks.GiftRemiderIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>
