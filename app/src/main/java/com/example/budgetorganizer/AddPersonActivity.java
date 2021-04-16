@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,7 +27,12 @@ public class AddPersonActivity extends AppCompatActivity {
         mPersonNameEditText = findViewById(R.id.ed_person_name);
         mBudgetEditText = findViewById(R.id.ed_budget);
         mDb = dbHelper.getWritableDatabase();
-
+        Intent intent = getIntent();
+        String name=intent.getStringExtra("name");
+        if(name!=null)
+        {
+            mPersonNameEditText.setText(name);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,5 +68,9 @@ public class AddPersonActivity extends AppCompatActivity {
 
     }
 
+    public void ChooseContact(View view) {
+        Intent intent=new Intent(this,Contacts.class);
+        startActivity(intent);
+    }
 
 }
