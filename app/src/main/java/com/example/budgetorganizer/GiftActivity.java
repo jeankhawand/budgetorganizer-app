@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.budgetorganizer.data.DbHelper;
+
 public class GiftActivity extends AppCompatActivity implements ListItemClickListener {
     private long person_id;
     private RecyclerView mGiftRecycleView;
@@ -26,23 +28,24 @@ public class GiftActivity extends AppCompatActivity implements ListItemClickList
         mGiftRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new GiftAdapter(this, this,person_id);
         mGiftRecycleView.setAdapter(mAdapter);
+        mAdapter.swapData(DbHelper.getPersonsGift(mAdapter.db,person_id));
 
     }
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+        mAdapter.swapData(DbHelper.getPersonsGift(mAdapter.db,person_id));
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        mAdapter.notifyDataSetChanged();
+        mAdapter.swapData(DbHelper.getPersonsGift(mAdapter.db,person_id));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.common_menu, menu);
         return true;
     }
     public void add(MenuItem item) {
@@ -54,6 +57,6 @@ public class GiftActivity extends AppCompatActivity implements ListItemClickList
     @Override
     public void onListItemClick(View view, int clickedItemIndex) {
         long id = (long) view.getTag();
-        Log.v("ClickedGift", String.valueOf(id));
+        Log.v("GiftActivity.java", String.valueOf(id));
     }
 }

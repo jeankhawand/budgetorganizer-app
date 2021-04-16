@@ -1,6 +1,5 @@
 package com.example.budgetorganizer;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -46,24 +45,23 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.GiftViewHolder
     @Override
     public void onBindViewHolder(@NonNull GiftAdapter.GiftViewHolder holder, int position) {
        if(gifts == null){
-            Log.v("GiftRV","is empty");
+            Log.v("GiftAdapter.java"," gifts is empty");
        }else{
            Gift gift = gifts.get(position);
            holder.mGiftNameTextView.setText(gift.getName());
-           holder.mGiftPriceTextView.setText(gift.getPrice()+"$");
-           if(gift.getPhotoPath() == null){
-            Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift_black);
-               holder.mGiftImageView.setImageDrawable(giftDrawable);
-           }else{
-               file = new File(gift.getPhotoPath());
-           }
+           holder.mGiftPriceTextView.setText(mContext.getResources().getString(R.string.amount, gift.getPrice()));
+               if (gift.getPhotoPath().matches("")) {
+                   Log.v("GiftAdapter.java", "photopath is empty");
+                   Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift_black);
+                   holder.mGiftImageView.setImageDrawable(giftDrawable);
+               }else{
+                   file = new File(gift.getPhotoPath());
+                   if (file.isFile() && file.canRead() && file.exists()) {
+                           holder.mGiftImageView.setImageBitmap(BitmapFactory.decodeFile(gift.getPhotoPath()));
+                           Log.v("GiftAdapter.java", "photopath " + gift.getPhotoPath());
+                   }
+               }
 
-           if(file != null && file.exists()){
-               holder.mGiftImageView.setImageBitmap(BitmapFactory.decodeFile(gift.getPhotoPath()));
-           }else{
-              Drawable giftDrawable = mContext.getResources().getDrawable(R.drawable.gift_black);
-               holder.mGiftImageView.setImageDrawable(giftDrawable);
-           }
            holder.mGiftDateTextView.setText(gift.getDate());
            holder.itemView.setTag(gift.getId());
        }
@@ -73,6 +71,10 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.GiftViewHolder
             return gifts.size();
         }
         return 0;
+    }
+    public void swapData(ArrayList<Gift> newgiftslist){
+        this.gifts = newgiftslist;
+        this.notifyDataSetChanged();
     }
     class GiftViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView mGiftNameTextView, mGiftPriceTextView, mGiftDateTextView;

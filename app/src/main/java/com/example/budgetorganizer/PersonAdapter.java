@@ -41,15 +41,23 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
     public void onBindViewHolder(@NonNull PersonViewHolder holder, int position) {
         Person person = persons.get(position);
         holder.mPersonTextView.setText(person.getName());
-        holder.mPersonBudgetTextView.setText(person.getBudget()+"$");
-        holder.mPersonGiftBoughtTextView.setText(person.getTotalGifBought()+" gift(s) bought");
+        holder.mPersonBudgetTextView.setText(mContext.getResources().getString(R.string.amount, person.getBudget()));
+        if(person.getTotalGifBought() == 0){
+            holder.mPersonGiftBoughtTextView.setText(mContext.getResources().getString(R.string.zero_gifts_bought));
+        }
+        else{
+            holder.mPersonGiftBoughtTextView.setText(mContext.getResources()
+                    .getQuantityString(R.plurals.gifts_bought,
+                    person.getTotalGifBought(), person.getTotalGifBought(),
+                    person.getTotalGifBought()));
+        }
+
         holder.itemView.setTag(person.getId());
     }
-//    public void swapCursor(Cursor newCursor){
-//        if (mCursor != null) mCursor.close();
-//        mCursor = newCursor;
-//        if(newCursor != null) this.notifyDataSetChanged();
-//    }
+    public void swapData(ArrayList<Person> newpersonslist){
+        this.persons = newpersonslist;
+        this.notifyDataSetChanged();
+    }
     public int getItemCount() {
         return persons.size();
     }

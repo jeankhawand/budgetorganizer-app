@@ -7,10 +7,4 @@
         android:onClick="add"
         android:title="@string/add_person"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/notification_background"
-        android:icon="@drawable/bell"
-        android:onClick="testNotification"
-        android:title="@string/add_person"
-        app:showAsAction="always" />
 </menu>

@@ -1,11 +1,7 @@
 package com.example.budgetorganizer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,16 +18,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.budgetorganizer.data.DbHelper;
 import com.example.budgetorganizer.data.Gift;
 import com.example.budgetorganizer.data.Person;
+import com.example.budgetorganizer.tasks.CalendarEventTask;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class AddGiftActivity extends AppCompatActivity {
     private Button mPickDateButton;
@@ -39,6 +37,7 @@ public class AddGiftActivity extends AppCompatActivity {
     private long person_id;
     private String date = "";
     private String picturePath = "";
+    private long mdateSelection = 0;
     private SQLiteDatabase mDb;
 
     @Override
@@ -57,7 +56,7 @@ public class AddGiftActivity extends AppCompatActivity {
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.common_menu, menu);
         return true;
     }
     public void add(MenuItem item) {
@@ -77,6 +76,7 @@ public class AddGiftActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM d, yyyy");
                 date = simpleDateFormat.format(calendar.getTime());
+                mdateSelection = calendar.getTimeInMillis();
                 Log.v("CurrentDate",date);
             }
             gift.setDate(date);
@@ -87,6 +87,8 @@ public class AddGiftActivity extends AppCompatActivity {
             person.setBudget(person.getBudget()-gift.getPrice());
             DbHelper.updatePerson(mDb, person);
             Context context = getApplicationContext();
+            CalendarEventTask calendarEventTask = new CalendarEventTask(this,person.getName(),gift.getName(),mdateSelection);
+            calendarEventTask.execute();
             CharSequence text = gift.getName()+" Added To The List !";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
@@ -104,6 +106,7 @@ public class AddGiftActivity extends AppCompatActivity {
                 v -> materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER"));
         materialDatePicker.addOnPositiveButtonClickListener(
                 (MaterialPickerOnPositiveButtonClickListener) selection -> {
+                    mdateSelection = (long) selection;
                     date = materialDatePicker.getHeaderText();
                 });
     }
@@ -113,20 +116,16 @@ public class AddGiftActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Choose your profile picture");
 
-        builder.setItems(options, new DialogInterface.OnClickListener() {
+        builder.setItems(options, (dialog, item) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
+            if (options[item].equals("Take Photo")) {
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, 0);
 
-                if (options[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
+            } else if (options[item].equals("Choose from Gallery")) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto , 1);
 
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , 1);
-
-                }
             }
         });
         builder.show();

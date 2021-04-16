@@ -9,5 +9,13 @@
     <string name="price_hint" >50</string>
     <string name="gift_name_hint" >Amazon Gift Card</string>
     <string name="lbl_gift_name" >Gift Name</string>
+    <string name="notification_channel_name" >Main Notification Channel</string>
+    <string name="gift_reminder_notification_title" >Upcoming Gift Reminder</string>
+    <string name="zero_gifts_bought">No gift bought</string>
+    <plurals name="gifts_bought">
+        <item quantity="one">%d gift bought</item>
+        <item quantity="other">%d gifts bought</item>
+    </plurals>
+    <string name="amount">%d $</string>
 
 </resources>
