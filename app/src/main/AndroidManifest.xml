@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetOrganizer"
         tools:replace="android:icon,android:theme">
-        <activity android:name=".Contacts"></activity>
+        <activity android:name=".Contacts" />
 
         <service
             android:name=".tasks.GiftRemiderIntentService"

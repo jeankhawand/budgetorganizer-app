@@ -1,13 +1,18 @@
 package com.example.budgetorganizer;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -24,10 +29,22 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     private PersonAdapter mAdapter;
     private RecyclerView mPersonRecyclerView;
     final int callbackId = 42;
+    private IntentFilter mChargingIntentFilter;
+    private IntentFilter mWifiIntentFilter;
+    private  WifiStateReceiver mWifiStateReceiver;
+    private ChargingBroadcastReceiver mChargingBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mChargingIntentFilter = new IntentFilter();
+        mChargingBroadcastReceiver = new ChargingBroadcastReceiver();
+        mWifiStateReceiver = new WifiStateReceiver();
+        mWifiIntentFilter = new IntentFilter();
+        mChargingIntentFilter.addAction(Intent.ACTION_POWER_CONNECTED);
+        mChargingIntentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        mWifiIntentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        mWifiIntentFilter.addAction(CONNECTIVITY_SERVICE);
         mPersonRecyclerView = findViewById(R.id.rv_person_list);
         mPersonRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new PersonAdapter(this, this);
@@ -49,12 +66,24 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     protected void onResume() {
         super.onResume();
         mAdapter.swapData(DbHelper.getPersonsWithGiftBought(mAdapter.db));
+        registerReceiver(mChargingBroadcastReceiver, mChargingIntentFilter);
+        registerReceiver(mWifiStateReceiver, mWifiIntentFilter);
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mChargingBroadcastReceiver);
+        unregisterReceiver(mWifiStateReceiver);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         mAdapter.swapData(DbHelper.getPersonsWithGiftBought(mAdapter.db));
+
     }
 
     @Override
@@ -82,4 +111,62 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     public void testNotification(MenuItem item) {
         NotificationUtils.remindUpcommingGift(this);
     }
+    private void detectChargingStatus(boolean isCharging){
+        if (isCharging){
+           Toast toast = Toast.makeText(this, "Phone is Charging", Toast.LENGTH_SHORT);
+            toast.show();
+        }else{
+            Toast toast = Toast.makeText(this, "Phone isn't Charging", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+    private void detectWifiStatus(int WifiState){
+        Toast toast;
+        switch(WifiState) {
+            case WifiManager.WIFI_STATE_DISABLED:
+                //do something
+                toast = Toast.makeText(this, "Wifi Disabled", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case WifiManager.WIFI_STATE_ENABLED:
+                toast = Toast.makeText(this, "Wifi Enabled", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case WifiManager.WIFI_STATE_ENABLING:
+                toast = Toast.makeText(this, "Wifi Enabling", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case WifiManager.WIFI_STATE_DISABLING:
+                toast = Toast.makeText(this, "Wifi Disabling", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case WifiManager.WIFI_STATE_UNKNOWN:
+                toast = Toast.makeText(this, "Check Hardware ", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+
+        }
+
+    }
+    public class ChargingBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            boolean isCharging = (action.equals(Intent.ACTION_POWER_CONNECTED));
+            detectChargingStatus(isCharging);
+        }
+
+    }
+    public class WifiStateReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+                    WifiManager.WIFI_STATE_UNKNOWN);
+
+            detectWifiStatus(extraWifiState);
+
+        }
+    }
+
 }

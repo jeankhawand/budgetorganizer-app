@@ -3,12 +3,15 @@ package com.example.budgetorganizer.tasks;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CalendarContract;
 import android.util.Log;
 
 import java.util.TimeZone;
+
+import static android.database.DatabaseUtils.dumpCursorToString;
 
 public class CalendarEventTask extends AsyncTask<Context, Void, Void> {
     long startMillis = 0;
@@ -42,6 +45,7 @@ public class CalendarEventTask extends AsyncTask<Context, Void, Void> {
             startMillis = mDate;
             ContentResolver cr = mContext.getContentResolver();
             ContentValues values = new ContentValues();
+            getCalendarId();
             values.put(CalendarContract.Events.DTSTART, startMillis);
             values.put(CalendarContract.Events.DTEND, endMillis);
             values.put(CalendarContract.Events.TITLE, mgiftName);
@@ -57,5 +61,18 @@ public class CalendarEventTask extends AsyncTask<Context, Void, Void> {
         }
 
         return  null;
+    }
+    private void getCalendarId() {
+        String[] projection = new String[]{CalendarContract.Calendars._ID, CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.Calendars.ACCOUNT_NAME};
+        Cursor cursor =
+                mContext.getContentResolver().
+                        query(
+                                CalendarContract.Calendars.CONTENT_URI,
+                                projection,
+                                null,
+                                null,
+                                null);
+            Log.v("CalendarEventTask.java",dumpCursorToString(cursor));
+
     }
 }
